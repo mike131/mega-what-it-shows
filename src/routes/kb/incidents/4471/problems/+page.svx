@@ -8,7 +8,7 @@ signature: Michael Lee
 ---
 
 <script>
-  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
   import Callout from '#lib/kb/Callout.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 </script>
@@ -23,7 +23,10 @@ moves. Those reports stay broken after it ships.
 
 ## What #4471 holds
 
-<ProblemTable ticket={4471} />
+The desk's own cause table, over the export as it came. The one-day moves are its footnote:
+they are counted under the parser, where the desk files them by tenant.
+
+<CauseTable ticket={4471} />
 
 Each problem has its own ticket in
 [mike131/mega-what-it-shows](https://github.com/mike131/mega-what-it-shows/issues):
@@ -38,7 +41,7 @@ Each problem has its own ticket in
 3. **The one-day moves** ([#3](https://github.com/mike131/mega-what-it-shows/issues/3)): the
    date moves by one day in the same month, and two people in different time zones get
    different days for one meeting. No month and day are swapped. The desk listed these reports
-   in `desk-notes.json`; the #4471 table counts them under the parser, by tenant.
+   in `desk-notes.json`. The cause table counts them under the parser, by tenant.
 
 ## How the reports got merged
 
