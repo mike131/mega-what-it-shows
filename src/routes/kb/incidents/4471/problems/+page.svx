@@ -1,0 +1,59 @@
+---
+layout: runbook
+title: '#4471 · three problems, not one'
+owner: Michael Lee
+status: open
+reviewed: 2026-11-04
+signature: Michael Lee
+---
+
+<script>
+  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+The [#4471 page](/kb/incidents/4471) says the ticket is one known bug with one fix queued. The
+reports say otherwise. #4471 holds three problems, and only one of them has the queued fix.
+
+<Callout kind="warn">
+Not one issue. The queued parser fix does not touch the booking-v3 form hint or the one-day
+moves. Those reports stay broken after it ships.
+</Callout>
+
+## What #4471 holds
+
+<ProblemTable ticket={4471} />
+
+Each problem has its own ticket in
+[mike131/mega-what-it-shows](https://github.com/mike131/mega-what-it-shows/issues):
+
+1. **The parser** ([#1](https://github.com/mike131/mega-what-it-shows/issues/1)): the shared
+   parser reads every date month first. A day-first tenant books 7 April, and the invite says
+   4 July. The fix that #4471 queued is for this problem.
+2. **The booking-v3 hint** ([#2](https://github.com/mike131/mega-what-it-shows/issues/2)): the
+   booking-v3 form prints `MM/DD/YYYY` under its date field. People type what it tells them, and
+   the form reads their date the tenant's way, day first. The parser fix does not reach it. Only
+   reports sent through that form belong here.
+3. **The one-day moves** ([#3](https://github.com/mike131/mega-what-it-shows/issues/3)): the
+   date moves by one day in the same month, and two people in different time zones get
+   different days for one meeting. No month and day are swapped. The desk listed these reports
+   in `desk-notes.json`; the #4471 table counts them under the parser, by tenant.
+
+## How the reports got merged
+
+[Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges reports on subject alone, and
+nobody reads the body. The same subject lines cover all three problems, so the rule put them in
+one ticket. The cause comes from the tenant's locale, its booking form and the channel
+(`causes.ts`), and from what the body says. Intake's tag is a guess from the reporter's browser:
+do not count by it.
+
+## For the desk
+
+- Do not close #4471 when the parser fix ships. Check the hint and one-day tickets first.
+- When the reporter's tenant runs booking-v3 and they came in through the form, file the report
+  under the hint ticket.
+- When the body names the same month and a day one off, file it under the one-day ticket and
+  add its id to `desk-notes.json`.
+
+<RenderStamp {signature} />
